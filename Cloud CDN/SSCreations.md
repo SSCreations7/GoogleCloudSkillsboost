@@ -1,0 +1,129 @@
+# 🌐 Cloud CDN || GSP217 🚀 [![Open Lab](https://img.shields.io/badge/Open-Lab-blue?style=flat)](https://www.cloudskillsboost.google/games/7013/labs/43611)
+
+[![Watch on YouTube](https://img.shields.io/badge/Watch_on_YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtube.com/@ss_creations7?sub_confirmation=1)
+
+
+---
+### 🤝 Support
+If you found this helpful, please **Subscribe** to [SS Creations](https://youtube.com/@ss_creations7?sub_confirmation=1/videos) for more Google Cloud solutions!
+
+
+## ⚠️ Disclaimer ⚠️
+
+<blockquote style="background-color: #fffbea; border-left: 6px solid #f7c948; padding: 1em; font-size: 15px; line-height: 1.5;">
+  <strong>Educational Purpose Only:</strong> This script and guide are provided for the educational purposes to help you understand the lab services and boost your career. Before using the script, please open and review it to familiarize yourself with Google Cloud services.
+  <br><br>
+  <strong>Terms Compliance:</strong> Always ensure compliance with Qwiklabs' terms of service and YouTube's community guidelines. The aim is to enhance your learning experience — not to circumvent it.
+</blockquote>
+
+---
+
+<div style="padding: 15px; margin: 10px 0;">
+
+```bash
+
+PROJECT_ID=$(gcloud config get-value project)
+BUCKET_NAME="$PROJECT_ID"
+
+gsutil mb -l US gs://$BUCKET_NAME
+
+
+gsutil cp gs://cloud-training/gcpnet/cdn/cdn.png gs://$BUCKET_NAME
+
+
+gsutil iam ch allUsers:objectViewer gs://$BUCKET_NAME
+
+
+TOKEN=$(gcloud auth application-default print-access-token)
+
+curl -X POST -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "bucketName": "'"$PROJECT_ID"'",
+    "cdnPolicy": {
+      "cacheMode": "CACHE_ALL_STATIC",
+      "clientTtl": 60,
+      "defaultTtl": 60,
+      "maxTtl": 60,
+      "negativeCaching": false,
+      "serveWhileStale": 0
+    },
+    "compressionMode": "DISABLED",
+    "description": "",
+    "enableCdn": true,
+    "name": "cdn-bucket"
+  }' \
+  "https://compute.googleapis.com/compute/v1/projects/$PROJECT_ID/global/backendBuckets"
+
+sleep 20
+
+curl -X POST -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "defaultService": "projects/'"$PROJECT_ID"'/global/backendBuckets/cdn-bucket",
+    "name": "cdn-lb"
+  }' \
+  "https://compute.googleapis.com/compute/v1/projects/$PROJECT_ID/global/urlMaps"
+
+
+sleep 20
+
+curl -X POST -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "name": "cdn-lb-target-proxy",
+    "urlMap": "projects/'"$PROJECT_ID"'/global/urlMaps/cdn-lb"
+  }' \
+  "https://compute.googleapis.com/compute/v1/projects/$PROJECT_ID/global/targetHttpProxies"
+
+
+sleep 20
+
+curl -X POST -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{
+    "IPProtocol": "TCP",
+    "ipVersion": "IPV4",
+    "loadBalancingScheme": "EXTERNAL_MANAGED",
+    "name": "cdn-lb-forwarding-rule",
+    "networkTier": "PREMIUM",
+    "portRange": "80",
+    "target": "projects/'"$PROJECT_ID"'/global/targetHttpProxies/cdn-lb-target-proxy"
+  }' \
+  "https://compute.googleapis.com/compute/v1/projects/$PROJECT_ID/global/forwardingRules"
+```
+
+
+</div>
+
+---
+
+## 🎉 **Congratulations! Lab Completed Successfully!** 🏆  
+
+<div align="center">
+
+<h3 style="font-family: 'Segoe UI', sans-serif; color: linear-gradient(90deg, #4F46E5, #E114E5);">🌟 Connect with Cloud Enthusiasts 🌟</h3>
+<p style="font-family: 'Segoe UI', sans-serif;">Join the community, share knowledge, and grow together!</p>
+
+<a href="https://chat.whatsapp.com/J5CsxFqv9bmDXSdCYkNslq" target="_blank" style="text-decoration: none;">
+  <img src="https://img.shields.io/badge/-Join_WhatsApp_Channel-25D366?style=for-the-badge&logo=whatsapp&logoColor=white&labelColor=25D366" alt="WhatsApp Channel"/>
+</a>
+
+<a href="https://youtube.com/@ss_creations7?sub_confirmation=1" target="_blank" style="text-decoration: none;">
+  <img src="https://img.shields.io/badge/-Subscribe_YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white&labelColor=FF0000" alt="YouTube"/>
+</a>
+
+
+
+</div>
+
+---
+
+<div align="center">
+  <p style="font-size: 12px; color: #586069;">
+    <em>This guide is provided for educational purposes. Always follow Qwiklabs terms of service and YouTube's community guidelines.</em>
+  </p>
+</div>>
+
+
+
