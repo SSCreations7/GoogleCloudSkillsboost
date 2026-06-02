@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # =========================================================
-# AGAYE COPY KRNE NAAAA # FULLY AUTOMATED VERSION
+# FULLY AUTOMATED VERSION
 # =========================================================
 
 # Disable all prompts automatically
@@ -45,7 +45,7 @@ subscribe_message() {
 echo
 echo "${CYAN_TEXT}${BOLD_TEXT}╔════════════════════════════════════════════════════════╗${RESET_FORMAT}"
 echo "${CYAN_TEXT}${BOLD_TEXT}║                                                        ║${RESET_FORMAT}"
-echo "${CYAN_TEXT}${BOLD_TEXT}║        🚀 SS Creations BIGQUERY  PARTY TIME 🚀        ║${RESET_FORMAT}"
+echo "${CYAN_TEXT}${BOLD_TEXT}║        🚀 SS CREATIONS BIGQUERY  PARTY TIME 🚀          ║${RESET_FORMAT}"
 echo "${CYAN_TEXT}${BOLD_TEXT}║                                                        ║${RESET_FORMAT}"
 echo "${CYAN_TEXT}${BOLD_TEXT}╚════════════════════════════════════════════════════════╝${RESET_FORMAT}"
 echo
@@ -294,7 +294,7 @@ echo "${YELLOW_TEXT}${BOLD_TEXT}🚀 Executing Script on VM...${RESET_FORMAT}"
 subscribe_message
 
 gcloud compute ssh bigquery-instance \
-    --project=$DEVSHELL_PROJECT_ID \
+    --project=$DEVSHELL_PROJECT
     --zone=$ZONE \
     --quiet \
     --command="chmod +x /tmp/cp_disk.sh && /tmp/cp_disk.sh"
